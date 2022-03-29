@@ -1,12 +1,32 @@
-import { Request, Response } from "express";
+import { Request, Response} from "express";
 import { client, db } from "../config/config";
-import * as iol from "iol-packages"
-
+import * as iol from "iol-packages";
+import {v4 as uuidv4} from "uuid";
 //crud
-const crud = new iol.service(client);
+let crud = new iol.service(client);
 
 export const create = async (req: Request, res: Response) => {
   try{
+    var type:string = "admin";
+    var logChanger:string = req.payload?.name;
+    var event:string = "";
+    const id = uuidv4();
+    req.body.PK = req.header("for-coop-id");
+
+    if(req.headers.type == "application"){
+        req.body.SK = "application"+id;
+        req.body.filterDate = req.body.PK+"application";
+        req.body.disbursement = "PENDING";
+        req.body.applicationStatus = "PENDING";
+        req.body.filterMember = req.body.memberID + "PENDING"; //gsi for member
+        event = logChanger + " applied for a loan"
+        type = "member"
+    }else{
+        req.body.SK = "category"+id;
+        event = logChanger + " created " + req.body.loanName + " category"
+    }
+
+    
 
     const params = {
       TableName: db,
@@ -22,7 +42,7 @@ export const create = async (req: Request, res: Response) => {
   
 }
 
-export const retrieve = async (req: Request, res: Response) => {
+export const getBySKperCoop = async (req: Request, res: Response) => {
   try{
 
     const params = {
@@ -33,7 +53,7 @@ export const retrieve = async (req: Request, res: Response) => {
         "#SK": "SK"
       },
       ExpressionAttributeValues: {
-        ":PK": req.params.PK,
+        ":PK": req.header("for-coop-id"),
         ":SK": req.params.SK
       }
     }
@@ -44,7 +64,6 @@ export const retrieve = async (req: Request, res: Response) => {
   }catch(err){
     res.status(500).send(err);
   }
-  
 }
 
 export const update = async (req: Request, res: Response) => {

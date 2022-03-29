@@ -7,16 +7,19 @@ import * as controller from  "../controllers/controller"
 //refer to the middleware
 import {validator, schemaTest} from "../middlewares/validateReqLoans"
 
-//Create
-router.post("/create", validator.body(schemaTest), controller.create)
+//auth
+import { auth } from "../middlewares/auth";
 
 //Create
-router.get("/retrieve/:PK/:SK", controller.retrieve)
+router.post("/create", auth.verifyToken, validator.body(schemaTest), controller.create)
 
-//Create
-router.put("/update", validator.body(schemaTest), controller.update)
+//Get
+router.get("/retrieve/:PK", auth.verifyToken, controller.getBySKperCoop)
 
-//Create
-router.delete("/delete", validator.body(schemaTest), controller.del)
+//Update
+router.put("/update", auth.verifyToken, validator.body(schemaTest), controller.update)
+
+//Delete
+router.delete("/delete", auth.verifyToken, validator.body(schemaTest), controller.del)
 
 export default router;

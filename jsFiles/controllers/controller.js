@@ -36,7 +36,7 @@ exports.del = exports.update = exports.retrieve = exports.create = void 0;
 const config_1 = require("../config/config");
 const iol = __importStar(require("iol-packages"));
 //crud
-const crud = new iol.service(config_1.client);
+let crud = new iol.service(config_1.client);
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const params = {
@@ -66,7 +66,7 @@ const retrieve = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
         };
         const result = yield crud.fetch(params);
-        res.send(iol.returnResponse(201, "Succesfully Created", result));
+        res.send(iol.returnResponse(201, "Succesfully Retrieved", result));
     }
     catch (err) {
         res.status(500).send(err);
@@ -88,7 +88,7 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             ReturnValues: 'ALL_NEW'
         };
         const result = yield crud.update(params);
-        res.send(iol.returnResponse(201, "Succesfully Created", result));
+        res.send(iol.returnResponse(201, "Succesfully Updated", result));
     }
     catch (err) {
         res.status(500).send(err);
@@ -106,7 +106,7 @@ const del = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             ReturnValues: 'ALL_OLD'
         };
         const result = yield crud.delete(params);
-        res.send(iol.returnResponse(201, "Succesfully Created", result));
+        res.send(iol.returnResponse(201, "Succesfully Delete", result));
     }
     catch (err) {
         res.status(500).send(err);

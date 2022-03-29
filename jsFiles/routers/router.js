@@ -32,7 +32,7 @@ const validateReqLoans_1 = require("../middlewares/validateReqLoans");
 //Create
 router.post("/create", validateReqLoans_1.validator.body(validateReqLoans_1.schemaTest), controller.create);
 //Create
-router.get("/retrieve/:PK/:SK", controller.retrieve);
+router.get("/retrieve/:PK", controller.retrieve);
 //Create
 router.put("/update", validateReqLoans_1.validator.body(validateReqLoans_1.schemaTest), controller.update);
 //Create
